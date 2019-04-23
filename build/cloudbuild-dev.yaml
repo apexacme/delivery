@@ -59,14 +59,14 @@ steps:
                   ports:
                     - containerPort: 8080
         EOF
-  - id: 'deploy2'
-    name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - set
-      - image
-      - deployment
-      - $_PROJECT_NAME
-      - delivery=gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=standard-cluster-1'
+#  - id: 'deploy2'
+#    name: 'gcr.io/cloud-builders/kubectl'
+#    args:
+#      - set
+#      - image
+#      - deployment
+#      - $_PROJECT_NAME
+#      - delivery=gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA
+#    env:
+#      - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast1-a'
+#      - 'CLOUDSDK_CONTAINER_CLUSTER=standard-cluster-1'
