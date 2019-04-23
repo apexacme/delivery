@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>boot-camp-template</artifactId>
+	<artifactId>boot-camp-delivery</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>boot-camp-template</name>
+	<name>boot-camp-delivery</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
