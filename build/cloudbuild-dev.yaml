@@ -65,7 +65,7 @@ steps:
       - set
       - image
       - deployment
-      - $PROJECT_NAME
+      - $_PROJECT_NAME
       - delivery=gcr.io/$PROJECT_ID/$_PROJECT_NAME:$COMMIT_SHA
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast1-a'
