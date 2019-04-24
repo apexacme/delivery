@@ -1,2 +1,2 @@
-insert into item (name, price) values ('aaa', 200);
-insert into item (name, price) values ('bbb', 200);
+insert into SampleUser(age,username) values(15, 'testuser1');
+insert into SampleUser(age,username) values(20, 'testuser2');

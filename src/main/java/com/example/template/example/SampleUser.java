@@ -1,46 +1,53 @@
 package com.example.template.example;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 @Entity
-@Table(name = "user")
+@Table(name = "sampleuser")
 public class SampleUser implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long Id;
-    int age;
-    String username;
 
-    public Long getId() {
-        return Id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long Id;
+	int age;
+	String username;
 
-    public void setId(Long id) {
-        Id = id;
-    }
+	public Long getId() {
+		return Id;
+	}
 
-    public int getAge() {
-        return age;
-    }
+	public void setId(Long id) {
+		Id = id;
+	}
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+	public int getAge() {
+		return age;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public void setAge(int age) {
+		this.age = age;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    @PostPersist
-    public void userPostUpdate(){
-        System.out.println("Id = " + this.Id);
-        System.out.println("age = " + this.age);
-        System.out.println("username = " + this.username);
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+	}
 
 }

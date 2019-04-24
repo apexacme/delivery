@@ -1,4 +1,7 @@
-package com.example.template.kafka;
+package com.example.template.config.kafka;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -8,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class KafkaSenderConfig {
@@ -37,5 +37,5 @@ public class KafkaSenderConfig {
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<String, String>(producerFactory());
     }
-
+    
 }
