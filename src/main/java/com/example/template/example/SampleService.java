@@ -66,7 +66,7 @@ public class SampleService {
 
 
 	public SampleUser restCall(long id) {
-		String url = "http://localhost:8080/userInfoes/" + id;
+		String url = "http://35.243.123.46:8080/userInfoes/" + id;
 		ResponseEntity<SampleUser> re = restTemplate.getForEntity(url, SampleUser.class);
 		
 //		this.findByUser(id);
