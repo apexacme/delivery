@@ -3,7 +3,7 @@ server:
 
 
 topic:
-  orderTopic: orderTopic
+  orderTopic: deliveryTopic
 
 ---
 spring:
