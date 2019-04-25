@@ -17,21 +17,20 @@ public class SampleController {
     SampleService sampleService;
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public SampleUser call(HttpServletRequest request,
-                                               HttpServletResponse response,
-                                               @PathVariable(value = "name") String name
+	public SampleUser call(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "name") String name
+			
     ) throws Exception {
-        
-    	return sampleService.call(name);
+    	return sampleService.eventCall(name);
     }
     
     
-    @RequestMapping(value = "/rest", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public SampleUser restCall(HttpServletRequest request,
-                                               HttpServletResponse response
+    @RequestMapping(value = "/rest/{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public SampleUser restCall(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable(value = "id") long id
+			
     ) throws Exception {
-//        Map<String,Object> returnData = new HashMap<String,Object>();
-        return sampleService.restCall("restCall");
+        return sampleService.restCall(id);
     }
     
 }
