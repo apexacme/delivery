@@ -17,16 +17,16 @@ public class SampleUser implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long Id;
+	Long id;
 	int age;
 	String username;
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		id = id;
 	}
 
 	public int getAge() {
