@@ -1,8 +1,16 @@
 package com.example.template.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,7 +32,10 @@ public class SampleService {
 	@Autowired
     private RestTemplate restTemplate;
 	
-	public SampleUser call(String name) {
+	@Autowired
+	private SampleUserRepository sampleUserRepository;
+	
+	public SampleUser eventCall(String name) {
 		ObjectMapper objectMapper = new ObjectMapper();
         String json = null;
 
@@ -54,10 +65,58 @@ public class SampleService {
 	}
 
 
-	public SampleUser restCall(String name) {
-		String url = "http://localhost:8080/sample/" + name;
+	public SampleUser restCall(long id) {
+		String url = "http://localhost:8080/userInfoes/" + id;
 		ResponseEntity<SampleUser> re = restTemplate.getForEntity(url, SampleUser.class);
+		
+//		this.findByUser(id);
+		
 		return re.getBody();
 	}
+	
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public List<SampleUser> findByUser(long id) {
+		
+		ArrayList<String> test = new ArrayList<String>();
+		test.add("testuser1");
+		test.add("testuser2");
+		sampleUserRepository.findAllByUsername(test);
+		
+		ArrayList<SampleUser> test1 = new ArrayList<SampleUser>();
+		SampleUser su1 = new SampleUser();
+		su1.setAge(15);
+		su1.setUsername("testuser1");
+		test1.add(su1);
+		
+		su1 = new SampleUser();
+		su1.setAge(20);
+		su1.setUsername("testuser2");
+		test1.add(su1);
+		
+		sampleUserRepository.findAll();
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<SampleUser> cq = cb.createQuery(SampleUser.class);
+
+//		entityManager.getTransaction().begin();
+		Root<SampleUser> from = cq.from(SampleUser.class);
+		cq.where(cb.equal(from.get("Id"), id));
+		
+
+		List<SampleUser> students = entityManager.createQuery(cq).getResultList();
+				
+		entityManager
+			.createQuery ("select s from SampleUser s where s.id = :id ", SampleUser.class)
+			.setParameter("id", id)
+			.getResultList();
+		
+		return students;
+		
+	}
+
+
 	
 }
