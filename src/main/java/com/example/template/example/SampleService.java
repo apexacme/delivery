@@ -56,6 +56,7 @@ public class SampleService {
 
 	
 	@KafkaListener(topics = "class-topic")
+	//	@KafkaListener(topics = "${topic.orderTopic}")
 	public void sampleReceiveEvent(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
 
 		Gson gson = new Gson();
