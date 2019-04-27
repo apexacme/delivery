@@ -1,14 +1,10 @@
 package com.example.template.example;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import com.example.template.DeliveryRepository;
+import com.example.template.OrderPlaced;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import java.io.IOException;
 
 @Service
 public class SampleService {
@@ -31,9 +25,7 @@ public class SampleService {
 	
 	@Autowired
     private RestTemplate restTemplate;
-	
-	@Autowired
-	private SampleUserRepository sampleUserRepository;
+
 	
 	public SampleUser eventCall(String name) {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -54,14 +46,36 @@ public class SampleService {
         return sampleUser;
 	}
 
+	@Autowired
+    DeliveryRepository deliveryRepository;
 	
-	@KafkaListener(topics = "class-topic")
+	@KafkaListener(topics = "topic")
 	//	@KafkaListener(topics = "${topic.orderTopic}")
 	public void sampleReceiveEvent(@Payload String message, ConsumerRecord<?, ?> consumerRecord) {
 
-		Gson gson = new Gson();
-		SampleUser enrolled = gson.fromJson(message, SampleUser.class);
-		System.out.println("subscriber : " + message);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		OrderPlaced orderPlaced = null;
+		try {
+			orderPlaced = objectMapper.readValue(message, OrderPlaced.class);
+
+			if (!OrderPlaced.class.getSimpleName().equals(orderPlaced.getType())) return;
+
+			System.out.println("subscriber : " + message);
+//			Optional<Delivery> delivery = deliveryRepository.findAllById();
+//			delivery....
+
+//
+//			Delivery delivery = new Delivery();
+//			delivery.setDeliveryAddress(orderPlaced.getType());
+//			deliveryRepository.save(delivery)
+
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -75,48 +89,6 @@ public class SampleService {
 		return re.getBody();
 	}
 	
-	
-	@PersistenceContext
-	private EntityManager entityManager;
-
-	public List<SampleUser> findByUser(long id) {
-		
-		ArrayList<String> test = new ArrayList<String>();
-		test.add("testuser1");
-		test.add("testuser2");
-		sampleUserRepository.findAllByUsername(test);
-		
-		ArrayList<SampleUser> test1 = new ArrayList<SampleUser>();
-		SampleUser su1 = new SampleUser();
-		su1.setAge(15);
-		su1.setUsername("testuser1");
-		test1.add(su1);
-		
-		su1 = new SampleUser();
-		su1.setAge(20);
-		su1.setUsername("testuser2");
-		test1.add(su1);
-		
-		sampleUserRepository.findAll();
-		
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<SampleUser> cq = cb.createQuery(SampleUser.class);
-
-//		entityManager.getTransaction().begin();
-		Root<SampleUser> from = cq.from(SampleUser.class);
-		cq.where(cb.equal(from.get("Id"), id));
-		
-
-		List<SampleUser> students = entityManager.createQuery(cq).getResultList();
-				
-		entityManager
-			.createQuery ("select s from SampleUser s where s.id = :id ", SampleUser.class)
-			.setParameter("id", id)
-			.getResultList();
-		
-		return students;
-		
-	}
 
 
 	

@@ -2,14 +2,9 @@ package com.example.template;
 
 
 
-import com.example.template.example.SampleUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import javax.persistence.*;
@@ -18,7 +13,7 @@ import java.io.Serializable;
 @Entity
 public class Delivery implements Serializable {
 
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long deliveryID;
     private String deliveryAddress;
     private String deveryState;
@@ -63,5 +58,29 @@ public class Delivery implements Serializable {
 
         ProducerRecord producerRecord = new ProducerRecord<>("topic", json);
         kafkaTemplate.send(producerRecord);
+    }
+
+    public Long getDeliveryID() {
+        return deliveryID;
+    }
+
+    public void setDeliveryID(Long deliveryID) {
+        this.deliveryID = deliveryID;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getDeveryState() {
+        return deveryState;
+    }
+
+    public void setDeveryState(String deveryState) {
+        this.deveryState = deveryState;
     }
 }
