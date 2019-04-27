@@ -1,8 +1,6 @@
 package com.example.template;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface DeliveryRepository  extends PagingAndSortingRepository<Delivery, Long>{
-
-
+public interface DeliveryRepository extends CrudRepository<Delivery, Long> {
 }

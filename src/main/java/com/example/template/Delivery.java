@@ -5,46 +5,37 @@ package com.example.template;
 import com.example.template.example.SampleUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.PostPersist;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class Delivery implements Serializable {
 
-    @Id @GeneratedValue
-    String deliveryID;
-    String deliveryAddress;
-    String deliveryState;
-    String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+    @GeneratedValue
+    private Long deliveryID;
+    private String deliveryAddress;
+    private String deveryState;
 
     @PostPersist
-    private void publishProductRegistered() {
+    private void publishDeliveryPretended() {
+
+        KafkaTemplate kafkaTemplate = Application.applicationContext.getBean(KafkaTemplate.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = null;
 
-        KafkaTemplate kafkaTemplate = Application.applicationContext.getBean(KafkaTemplate.class);
-
-        DeliveryPretended deliveryPretended = new DeliveryPretended();
+        DeliveryPretended deliveryPretended= new DeliveryPretended();
         try {
-            deliveryPretended.getClass();
-
-            json = objectMapper.writeValueAsString();
+//            deliveryPretended.setCampaign(this);
+//            campaignRegistered.setType(CampaignRegistered.class.getSimpleName());
+            json = objectMapper.writeValueAsString(deliveryPretended);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("JSON format exception", e);
         }
@@ -52,44 +43,25 @@ public class Delivery implements Serializable {
         ProducerRecord producerRecord = new ProducerRecord<>("topic", json);
         kafkaTemplate.send(producerRecord);
     }
-//    public Delivery(){
-//
-//    }
-//    public Delivery(String deliveryID, String deliveryAddress, String deliveryState) {
-//        this.deliveryID = deliveryID;
-//        this.deliveryAddress = deliveryAddress;
-//        this.deliveryState = deliveryState;
-//    }
 
+    @PostRemove
+    private void publishDeliveryCancelled() {
 
+        KafkaTemplate kafkaTemplate = Application.applicationContext.getBean(KafkaTemplate.class);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
 
-    public String getDeliveryID() {
-        return deliveryID;
+        DeliveryCancelled deliveryCancelled= new DeliveryCancelled();
+        try {
+//            campaignRegistered.setCampaign(this);
+//            campaignRegistered.setType(CampaignRegistered.class.getSimpleName());
+            json = objectMapper.writeValueAsString(deliveryCancelled);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON format exception", e);
+        }
+
+        ProducerRecord producerRecord = new ProducerRecord<>("topic", json);
+        kafkaTemplate.send(producerRecord);
     }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getDeliveryState() {
-        return deliveryState;
-    }
-
-    public void setDeliveryState(String deliveryState) {
-        this.deliveryState = deliveryState;
-    }
-
-    public void setDeliveryID(String deliveryID) {
-        this.deliveryID = deliveryID;
-    }
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
-    }
-
 }

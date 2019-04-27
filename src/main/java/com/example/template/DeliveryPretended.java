@@ -6,32 +6,22 @@ import java.io.Serializable;
 public class DeliveryPretended  implements Serializable {
 
 
-    String deliveryID; // orderID
-    String deliveryAddress;
-    String deliveryState;
-    String type;
+    private Delivery delivery;
+    private String type;
 
-    public String getDeliveryID() {
-        return deliveryID;
+    public Delivery getDelivery() {
+        return delivery;
     }
 
-    public void setDeliveryID(String deliveryID) {
-        this.deliveryID = deliveryID;
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
+    public String getType() {
+        return type;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getDeliveryState() {
-        return deliveryState;
-    }
-
-    public void setDeliveryState(String deliveryState) {
-        this.deliveryState = deliveryState;
+    public void setType(String type) {
+        this.type = type;
     }
 }
