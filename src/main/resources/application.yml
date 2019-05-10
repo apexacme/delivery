@@ -3,13 +3,13 @@ server:
 
 
 topic:
-  orderTopic: deliveryTopic
+  orderTopic: orderTopic
 
 ---
 spring:
   profiles: default
   kafka:
-#    bootstrap-servers: http://35.194.123.133:19092
+    #    bootstrap-servers: http://35.194.123.133:19092
     bootstrap-servers: localhost:9092
     consumer:
       enable-auto-commit: true
